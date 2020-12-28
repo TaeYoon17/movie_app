@@ -1,13 +1,20 @@
 import React from 'react';
-import Proptypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-function Food({name,url}){
+function Food({name,url,rating}){
   return (
     <>
       <h2>I like {name} !!</h2>
       <a href={url}>Here is Location</a>
+      <span>{rating}/5</span>
     </>
   )
+}
+
+cosnt Food.PropTypes={
+  name: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  rating:PropTypes.number.isRequired
 }
 
 const FoodList = [
@@ -39,7 +46,7 @@ const FoodList = [
 
 function renderFood(dish){
   console.log(dish)
-  return <Food key={dish.id} name={dish.name} url={dish.URL}/>
+  return <Food key={dish.id} name={dish.name} url={dish.URL} rating={dish.rating}/>
 }
 
 function App() {
