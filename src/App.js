@@ -1,37 +1,48 @@
+import axios from 'axios';
 import React from 'react';
+import Movie from './Movie'
+import "./App.css";
 
 class App extends React.Component{
-  constructor(props){
-    super(props)
-    console.log("hello");
-  }
   state={
-    cnt:0
+    isLoading: true,
+    movies:[]
   };
-  plus= () =>{
-    this.setState(current=>({cnt:current.cnt+1}));
-  };
-  minus= () =>{
-    this.setState(current=>({cnt:current.cnt-1}));
-  };
-  componentDidMount(){
-    console.log("hello@-@");
-  };
-  componentDidUpdate(){
-    console.log("I just Updated!!");
+  getMovies=async() =>{
+    const {
+      data:{
+        data:{ movies }
+      }
+    }=await axios.get("https://yts-proxy.now.sh/list_movies.json");
+    this.setState({movies,isLoading:false});
   }
-  componentWillUnmount(){
-    console.log("I just amounted");
+/*  setTimeout(() => {
+    this.setState()
+  }, 6000);
+*/
+  componentDidMount(){
+    this.getMovies();
   }
   render(){
-    return (
-      <>
-        <h1>This number is: {this.state.cnt}</h1>
-        <button onClick={this.plus}>plus</button>
-        <button onClick={this.minus}>minus</button>
-      </>
-      )
-  };
+    const {isLoading,movies}=this.state;
+    return(
+    <section class="container">{
+      isLoading 
+      ?( <div class="loader">
+        <span class="loader_text">Loading...</span>
+      </div>
+      ):(
+      movies.map(movie=><Movie
+      id={movie.id} 
+      year={movie.year} 
+      title={movie.title}
+      summary={movie.summary}
+      poster={movie.medium_cover_image}
+      />
+      ))}
+    </section>
+  )
+  }
 }
 
 export default App;
